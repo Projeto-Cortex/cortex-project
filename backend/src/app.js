@@ -7,11 +7,17 @@ import eventoRoutes from './routes/eventoRoutes.js'
 import dashboardRoutes from './routes/dashboardRoutes.js'
 
 const app = express()
-const allowedOrigins = process.env.CORS_ORIGIN
-  ? process.env.CORS_ORIGIN.split(',').map(o => o.trim())
-  : '*'
-app.use(cors({ origin: allowedOrigins }))
-app.use(express.json())
+app.use(cors({
+  origin: true,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}))
+app.use(express.json({ type: '*/*' }))
+app.use((req, res, next) => {
+  res.setHeader('Content-Type', 'application/json; charset=utf-8')
+  next()
+})
 
 app.get('/health', (req, res) => res.json({ status: 'ok' }))
 app.use('/api/auth', authRoutes)
