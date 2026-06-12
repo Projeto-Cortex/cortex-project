@@ -5,6 +5,8 @@ import Badge from '../components/ui/Badge'
 import Modal from '../components/ui/Modal'
 import api from '../services/api'
 
+const inputCls = "w-full border border-card-border rounded-lg px-3 py-2 text-sm text-ink placeholder:text-ink-muted bg-white focus:outline-none focus:border-primary transition-colors"
+
 const STATUS_LABELS = { TODOS: 'Todos', PENDING: 'Pendente', CONFIRMED: 'Confirmado', CANCELLED: 'Cancelado' }
 const STATUS_LIST = ['TODOS', 'PENDING', 'CONFIRMED', 'CANCELLED']
 
@@ -66,9 +68,7 @@ export default function EventosPage() {
     setModal({ tipo: 'editar', evento })
   }
 
-  function fecharModal() {
-    setModal({ tipo: null, evento: null })
-  }
+  function fecharModal() { setModal({ tipo: null, evento: null }) }
 
   function handleFormChange(e) {
     const { name, value } = e.target
@@ -138,21 +138,24 @@ export default function EventosPage() {
 
   return (
     <Layout>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-semibold text-gray-800">Eventos</h1>
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-2xl font-semibold text-ink">Eventos</h1>
+          <p className="text-sm text-ink-muted mt-1">Gerencie os eventos e reservas do buffet</p>
+        </div>
         <Button onClick={abrirCriar}>+ Novo evento</Button>
       </div>
 
       {/* Filtros */}
-      <div className="flex gap-2 mb-4">
+      <div className="flex gap-2 mb-5">
         {STATUS_LIST.map(s => (
           <button
             key={s}
             onClick={() => setFiltroStatus(s)}
             className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors ${
               filtroStatus === s
-                ? 'bg-primary text-white border-primary'
-                : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                ? 'bg-primary text-white border-primary shadow-sm'
+                : 'bg-white text-ink-light border-card-border hover:bg-canvas hover:text-ink'
             }`}
           >
             {STATUS_LABELS[s]}
@@ -161,50 +164,60 @@ export default function EventosPage() {
       </div>
 
       {loading ? (
-        <p className="text-gray-500">Carregando...</p>
+        <div className="flex items-center gap-2 text-sm text-ink-muted">
+          <div className="w-4 h-4 border-2 border-card-border border-t-primary rounded-full animate-spin" />
+          Carregando...
+        </div>
       ) : (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="bg-white border border-card-border rounded-xl overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 text-gray-500 text-left">
-              <tr>
-                <th className="px-4 py-3 font-medium">Cliente</th>
-                <th className="px-4 py-3 font-medium">Tipo</th>
-                <th className="px-4 py-3 font-medium">Data</th>
-                <th className="px-4 py-3 font-medium">Adultos</th>
-                <th className="px-4 py-3 font-medium">Crianças</th>
-                <th className="px-4 py-3 font-medium">Cardápio</th>
-                <th className="px-4 py-3 font-medium">Status</th>
-                <th className="px-4 py-3 font-medium">Ações</th>
+            <thead>
+              <tr className="border-b border-card-border bg-canvas">
+                <th className="px-5 py-3 text-left text-xs font-medium text-ink-muted uppercase tracking-wide">Cliente</th>
+                <th className="px-5 py-3 text-left text-xs font-medium text-ink-muted uppercase tracking-wide">Tipo</th>
+                <th className="px-5 py-3 text-left text-xs font-medium text-ink-muted uppercase tracking-wide">Data</th>
+                <th className="px-5 py-3 text-left text-xs font-medium text-ink-muted uppercase tracking-wide">Adultos</th>
+                <th className="px-5 py-3 text-left text-xs font-medium text-ink-muted uppercase tracking-wide">Crianças</th>
+                <th className="px-5 py-3 text-left text-xs font-medium text-ink-muted uppercase tracking-wide">Cardápio</th>
+                <th className="px-5 py-3 text-left text-xs font-medium text-ink-muted uppercase tracking-wide">Status</th>
+                <th className="px-5 py-3 text-left text-xs font-medium text-ink-muted uppercase tracking-wide">Ações</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody>
               {eventosFiltrados.length === 0 && (
                 <tr>
-                  <td colSpan="8" className="px-4 py-6 text-center text-gray-500">
+                  <td colSpan="8" className="px-5 py-10 text-center text-sm text-ink-muted">
                     Nenhum evento encontrado.
                   </td>
                 </tr>
               )}
-              {eventosFiltrados.map(ev => (
-                <tr key={ev.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-3 text-gray-800 font-medium">{ev.clientName}</td>
-                  <td className="px-4 py-3 text-gray-600">{ev.eventType}</td>
-                  <td className="px-4 py-3 text-gray-600">
+              {eventosFiltrados.map((ev, i) => (
+                <tr
+                  key={ev.id}
+                  className={`hover:bg-canvas transition-colors ${
+                    i < eventosFiltrados.length - 1 ? 'border-b border-card-border' : ''
+                  }`}
+                >
+                  <td className="px-5 py-3.5 font-medium text-ink">{ev.clientName}</td>
+                  <td className="px-5 py-3.5 text-ink-light">{ev.eventType}</td>
+                  <td className="px-5 py-3.5 text-ink-light">
                     {new Date(ev.date).toLocaleDateString('pt-BR')}
                   </td>
-                  <td className="px-4 py-3 text-gray-600">{ev.adults}</td>
-                  <td className="px-4 py-3 text-gray-600">{ev.children}</td>
-                  <td className="px-4 py-3 text-gray-600">{ev.cardapio?.nome ?? '—'}</td>
-                  <td className="px-4 py-3"><Badge status={ev.status} /></td>
-                  <td className="px-4 py-3 flex gap-2">
-                    <Button variant="secondary" className="text-xs px-2 py-1" onClick={() => abrirEditar(ev)}>
-                      Editar
-                    </Button>
-                    {ev.status === 'PENDING' && (
-                      <Button variant="danger" className="text-xs px-2 py-1" onClick={() => handleExcluir(ev.id)}>
-                        Excluir
+                  <td className="px-5 py-3.5 text-ink-light">{ev.adults}</td>
+                  <td className="px-5 py-3.5 text-ink-light">{ev.children}</td>
+                  <td className="px-5 py-3.5 text-ink-light">{ev.cardapio?.nome ?? '—'}</td>
+                  <td className="px-5 py-3.5"><Badge status={ev.status} /></td>
+                  <td className="px-5 py-3.5">
+                    <div className="flex gap-2">
+                      <Button variant="secondary" size="sm" onClick={() => abrirEditar(ev)}>
+                        Editar
                       </Button>
-                    )}
+                      {ev.status === 'PENDING' && (
+                        <Button variant="danger" size="sm" onClick={() => handleExcluir(ev.id)}>
+                          Excluir
+                        </Button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -213,7 +226,6 @@ export default function EventosPage() {
         </div>
       )}
 
-      {/* Modal criar/editar */}
       <Modal
         isOpen={modal.tipo !== null}
         onClose={fecharModal}
@@ -221,50 +233,42 @@ export default function EventosPage() {
       >
         <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nome do cliente</label>
-            <input name="clientName" value={form.clientName} onChange={handleFormChange}
-              className="border border-gray-300 rounded-lg px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-primary" />
+            <label className="block text-sm font-medium text-ink mb-1">Nome do cliente</label>
+            <input name="clientName" value={form.clientName} onChange={handleFormChange} className={inputCls} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Tipo do evento</label>
-            <input name="eventType" value={form.eventType} onChange={handleFormChange}
-              className="border border-gray-300 rounded-lg px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-primary" />
+            <label className="block text-sm font-medium text-ink mb-1">Tipo do evento</label>
+            <input name="eventType" value={form.eventType} onChange={handleFormChange} className={inputCls} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Data</label>
-            <input type="date" name="date" value={form.date} onChange={handleFormChange}
-              className="border border-gray-300 rounded-lg px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-primary" />
+            <label className="block text-sm font-medium text-ink mb-1">Data</label>
+            <input type="date" name="date" value={form.date} onChange={handleFormChange} className={inputCls} />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Adultos</label>
-              <input type="number" name="adults" min="0" value={form.adults} onChange={handleFormChange}
-                className="border border-gray-300 rounded-lg px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-primary" />
+              <label className="block text-sm font-medium text-ink mb-1">Adultos</label>
+              <input type="number" name="adults" min="0" value={form.adults} onChange={handleFormChange} className={inputCls} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Crianças</label>
-              <input type="number" name="children" min="0" value={form.children} onChange={handleFormChange}
-                className="border border-gray-300 rounded-lg px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-primary" />
+              <label className="block text-sm font-medium text-ink mb-1">Crianças</label>
+              <input type="number" name="children" min="0" value={form.children} onChange={handleFormChange} className={inputCls} />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Cardápio</label>
-            <select name="cardapioId" value={form.cardapioId} onChange={handleFormChange}
-              className="border border-gray-300 rounded-lg px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-primary">
+            <label className="block text-sm font-medium text-ink mb-1">Cardápio</label>
+            <select name="cardapioId" value={form.cardapioId} onChange={handleFormChange} className={inputCls}>
               <option value="">Sem cardápio</option>
               {cardapios.map(c => <option key={c.id} value={c.id}>{c.nome}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Observação</label>
-            <input name="notes" value={form.notes} onChange={handleFormChange}
-              className="border border-gray-300 rounded-lg px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-primary" />
+            <label className="block text-sm font-medium text-ink mb-1">Observação</label>
+            <input name="notes" value={form.notes} onChange={handleFormChange} className={inputCls} />
           </div>
           {modal.tipo === 'editar' && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-              <select name="status" value={form.status} onChange={handleFormChange}
-                className="border border-gray-300 rounded-lg px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-primary">
+              <label className="block text-sm font-medium text-ink mb-1">Status</label>
+              <select name="status" value={form.status} onChange={handleFormChange} className={inputCls}>
                 <option value="PENDING">Pendente</option>
                 <option value="CONFIRMED">Confirmado</option>
                 <option value="CANCELLED">Cancelado</option>
@@ -273,19 +277,19 @@ export default function EventosPage() {
           )}
 
           {formError && (
-            <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg p-3">
+            <div className="flex items-start gap-2 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2.5">
+              <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="flex-shrink-0 mt-0.5">
+                <circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/>
+              </svg>
               {formError}
             </div>
           )}
         </div>
 
-        <div className="flex justify-end gap-2 mt-4">
+        <div className="flex justify-end gap-2 mt-5">
           <Button variant="secondary" onClick={fecharModal}>Cancelar</Button>
-          <Button
-            onClick={modal.tipo === 'criar' ? handleSalvar : handleAtualizar}
-            disabled={saving}
-          >
-            {saving ? 'Salvando...' : modal.tipo === 'criar' ? 'Salvar' : 'Salvar alterações'}
+          <Button onClick={modal.tipo === 'criar' ? handleSalvar : handleAtualizar} disabled={saving}>
+            {saving ? 'Salvando...' : modal.tipo === 'criar' ? 'Criar evento' : 'Salvar alterações'}
           </Button>
         </div>
       </Modal>
