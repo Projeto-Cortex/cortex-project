@@ -31,6 +31,7 @@ model Cardapio {
   baseCriancas Int
   ativo        Boolean        @default(true)
   itens        ItemCardapio[]
+  events       Event[]
   @@map("cardapios")
 }
 
@@ -59,6 +60,7 @@ model Event {
   adults      Int         @default(0)
   children    Int         @default(0)
   cardapioId  Int?
+  cardapio    Cardapio?   @relation(fields: [cardapioId], references: [id])
   status      EventStatus @default(PENDING)
   notes       String?
   createdById Int
