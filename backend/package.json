@@ -1,0 +1,24 @@
+{
+  "name": "cortex-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
+  "dependencies": {
+    "express": "^4",
+    "@prisma/client": "^5",
+    "jsonwebtoken": "^9",
+    "bcryptjs": "^2",
+    "cors": "^2",
+    "dotenv": "^16"
+  },
+  "devDependencies": {
+    "prisma": "^5",
+    "nodemon": "^3"
+  }
+}

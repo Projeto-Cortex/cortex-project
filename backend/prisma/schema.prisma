@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(OPERATOR)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  events       Event[]
+  @@map("users")
+}
+
+enum Role {
+  ADMIN
+  OPERATOR
+}
+
+model Cardapio {
+  id           Int            @id @default(autoincrement())
+  nome         String
+  baseAdultos  Int
+  baseCriancas Int
+  ativo        Boolean        @default(true)
+  itens        ItemCardapio[]
+  @@map("cardapios")
+}
+
+model ItemCardapio {
+  id         Int      @id @default(autoincrement())
+  cardapioId Int
+  nome       String
+  quantidade Float
+  unidade    String
+  tipo       TipoItem
+  cardapio   Cardapio @relation(fields: [cardapioId], references: [id])
+  @@map("itens_cardapio")
+}
+
+enum TipoItem {
+  ADULTO
+  CRIANCA
+  FIXO
+}
+
+model Event {
+  id          Int         @id @default(autoincrement())
+  clientName  String
+  eventType   String
+  date        DateTime
+  adults      Int         @default(0)
+  children    Int         @default(0)
+  cardapioId  Int?
+  status      EventStatus @default(PENDING)
+  notes       String?
+  createdById Int
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  createdBy   User        @relation(fields: [createdById], references: [id])
+  @@map("events")
+}
+
+enum EventStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
