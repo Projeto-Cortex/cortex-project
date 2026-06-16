@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Limoeiro – Casa de Festas</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green: #3dab84;
+    --green-dark: #2d8f6c;
+    --green-light: #e8f7f2;
+    --green-xlight: #f4fbf8;
+    --warm: #f9f5f0;
+    --brown: #7a6b5a;
+    --text: #2c2218;
+    --text-muted: #7a6b5a;
+    --white: #ffffff;
+    --peach: #f7e8dc;
+    --gold: #d4a940;
+  }
+
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Lato', sans-serif; color: var(--text); background: var(--white); overflow-x: hidden; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.9rem 3rem;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(61,171,132,0.12);
+    transition: box-shadow 0.3s;
+  }
+  nav.scrolled { box-shadow: 0 2px 20px rgba(61,171,132,0.15); }
+  .nav-logo {
+    display: flex; align-items: center; gap: 0.6rem;
+    text-decoration: none;
+  }
+  .nav-logo img { height: 44px; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.9rem; font-weight: 400; color: var(--text-muted);
+    text-decoration: none; letter-spacing: 0.03em; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--green); }
+  .nav-cta {
+    background: var(--green) !important; color: var(--white) !important;
+    padding: 0.5rem 1.2rem !important; border-radius: 50px;
+    font-weight: 700 !important; font-size: 0.85rem !important;
+    transition: background 0.2s, transform 0.15s !important;
+  }
+  .nav-cta:hover { background: var(--green-dark) !important; transform: translateY(-1px); }
+  .nav-sistema {
+    color: var(--green) !important; border: 1.5px solid var(--green);
+    padding: 0.35rem 0.9rem !important; border-radius: 8px;
+    font-size: 0.8rem !important; font-weight: 700 !important;
+    transition: background 0.2s, color 0.2s !important;
+    display: inline-flex; align-items: center; gap: 0.35rem;
+  }
+  .nav-sistema:hover { background: var(--green) !important; color: var(--white) !important; }
+
+  /* ── HERO ── */
+  #hero {
+    position: relative; min-height: 100vh;
+    display: flex; align-items: center; overflow: hidden;
+    background: linear-gradient(135deg, #1a3d2e 0%, #2d6b50 50%, #3dab84 100%);
+  }
+  .hero-bg-pattern {
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.04) 1px, transparent 1px),
+                      radial-gradient(circle at 80% 80%, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .hero-balloons {
+    position: absolute; right: 0; top: 0; bottom: 0;
+    width: 50%; display: flex; align-items: center; justify-content: flex-end; overflow: hidden;
+  }
+  .hero-photo-frame {
+    width: 90%; height: 80vh; max-height: 700px;
+    border-radius: 180px 0 0 180px; overflow: hidden;
+  }
+  .hero-photo-frame img { width: 100%; height: 100%; object-fit: cover; }
+  .hero-photo-placeholder {
+    width: 100%; height: 100%;
+    background: linear-gradient(160deg, rgba(61,171,132,0.3) 0%, rgba(45,111,80,0.5) 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 1rem; color: rgba(255,255,255,0.6); font-size: 0.9rem;
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    width: 50%; padding: 0 3rem 0 5rem; color: var(--white);
+  }
+  .hero-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.9); font-size: 0.8rem; letter-spacing: 0.12em;
+    text-transform: uppercase; padding: 0.4rem 1rem; border-radius: 50px;
+    margin-bottom: 1.5rem; font-weight: 700;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif; font-size: clamp(2.4rem, 4vw, 3.8rem);
+    font-weight: 700; line-height: 1.15; margin-bottom: 1.2rem;
+  }
+  .hero-title span { color: #a8e8cf; }
+  .hero-subtitle {
+    font-size: 1.1rem; font-weight: 300; color: rgba(255,255,255,0.8);
+    line-height: 1.7; margin-bottom: 2.5rem; max-width: 420px;
+  }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--white); color: var(--green-dark);
+    padding: 0.9rem 2rem; border-radius: 50px;
+    font-weight: 700; font-size: 0.95rem; text-decoration: none; border: none; cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+  .btn-outline {
+    background: transparent; color: var(--white);
+    padding: 0.9rem 2rem; border-radius: 50px;
+    font-weight: 700; font-size: 0.95rem; text-decoration: none;
+    border: 2px solid rgba(255,255,255,0.5); cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.08); }
+  .hero-stats {
+    display: flex; gap: 2.5rem; margin-top: 3rem; padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.15);
+  }
+  .hero-stat-num { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: #a8e8cf; }
+  .hero-stat-label { font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-top: 0.2rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* ── SHARED ── */
+  section { padding: 6rem 5rem; }
+  .section-tag { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--green); font-weight: 700; margin-bottom: 0.8rem; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 700; line-height: 1.2; color: var(--text); margin-bottom: 1rem; }
+  .section-subtitle { font-size: 1rem; color: var(--text-muted); line-height: 1.7; max-width: 580px; font-weight: 300; }
+
+  /* ── FEATURES ── */
+  #features { background: var(--green-xlight); padding: 3rem 5rem; }
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .feature-card {
+    display: flex; gap: 1.2rem; align-items: flex-start;
+    padding: 1.5rem; border-radius: 16px; background: var(--white);
+    border: 1px solid rgba(61,171,132,0.12);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .feature-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(61,171,132,0.1); }
+  .feature-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--green-light); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
+  .feature-title { font-weight: 700; font-size: 1rem; color: var(--text); margin-bottom: 0.4rem; }
+  .feature-text { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+  /* ── SOBRE ── */
+  #sobre { background: var(--warm); display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+  .sobre-image {
+    position: relative; border-radius: 24px; overflow: hidden; aspect-ratio: 4/5;
+    background: linear-gradient(135deg, var(--green-light) 0%, var(--peach) 100%);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted); font-size: 0.85rem; flex-direction: column; gap: 0.5rem;
+  }
+  .sobre-image img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+  .sobre-text { color: var(--text-muted); line-height: 1.8; font-size: 1rem; font-weight: 300; margin-bottom: 1.5rem; }
+  .sobre-values { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 2rem; }
+  .sobre-value { display: flex; align-items: center; gap: 0.8rem; font-size: 0.95rem; color: var(--text); }
+  .sobre-value-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+
+  /* ── SERVIÇOS ── */
+  #servicos { background: var(--white); }
+  .servicos-header { margin-bottom: 3rem; }
+  .servicos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .servico-card { border-radius: 20px; overflow: hidden; border: 1px solid rgba(0,0,0,0.06); transition: transform 0.25s, box-shadow 0.25s; }
+  .servico-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,0,0,0.1); }
+  .servico-img { height: 180px; display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+  .servico-img img { width: 100%; height: 100%; object-fit: cover; }
+  .servico-img.s1 { background: linear-gradient(135deg, #e8f7f2 0%, #c8eee2 100%); }
+  .servico-img.s2 { background: linear-gradient(135deg, #fef5e7 0%, #fde8b8 100%); }
+  .servico-img.s3 { background: linear-gradient(135deg, #fdf0f4 0%, #f8d4e2 100%); }
+  .servico-body { padding: 1.5rem; }
+  .servico-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: var(--text); margin-bottom: 0.6rem; }
+  .servico-desc { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; font-weight: 300; }
+  .servico-tag { display: inline-block; margin-top: 1rem; background: var(--green-light); color: var(--green-dark); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; padding: 0.3rem 0.8rem; border-radius: 50px; }
+
+  /* ── GALERIA ── */
+  #galeria { background: var(--warm); }
+  .galeria-header { margin-bottom: 2.5rem; }
+  .galeria-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 220px); gap: 1rem; }
+  .galeria-item { border-radius: 16px; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; font-size: 2rem; cursor: pointer; transition: transform 0.2s; }
+  .galeria-item:hover { transform: scale(1.02); }
+  .galeria-item:hover .galeria-overlay { opacity: 1; }
+  .galeria-item img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+  .galeria-item.big { grid-column: span 2; grid-row: span 2; font-size: 3rem; }
+  .g1 { background: linear-gradient(135deg, #2d6b50, #3dab84); }
+  .g2 { background: linear-gradient(135deg, #d4a940, #e8c97a); }
+  .g3 { background: linear-gradient(135deg, #c97b8a, #e4a8b2); }
+  .g4 { background: linear-gradient(135deg, #4a7c8a, #7ab8c8); }
+  .g5 { background: linear-gradient(135deg, #8a6a4a, #c4a07a); }
+  .galeria-overlay { position: absolute; inset: 0; background: rgba(61,171,132,0.6); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; font-size: 1.5rem; color: white; }
+
+  /* ── DEPOIMENTOS ── */
+  #depoimentos { background: var(--green); }
+  #depoimentos .section-tag { color: #a8e8cf; }
+  #depoimentos .section-title { color: var(--white); }
+  #depoimentos .section-subtitle { color: rgba(255,255,255,0.7); }
+  .depoimenos-header { margin-bottom: 3rem; }
+  .depoimentos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .depoimento-card { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 2rem; transition: background 0.2s; }
+  .depoimento-card:hover { background: rgba(255,255,255,0.18); }
+  .depoimento-stars { color: #f7d070; font-size: 1rem; margin-bottom: 1rem; letter-spacing: 0.1em; }
+  .depoimento-text { font-size: 0.95rem; color: rgba(255,255,255,0.9); line-height: 1.7; font-style: italic; font-weight: 300; margin-bottom: 1.5rem; }
+  .depoimento-author { display: flex; align-items: center; gap: 0.8rem; }
+  .depoimento-avatar { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; color: var(--white); flex-shrink: 0; }
+  .depoimento-name { font-weight: 700; color: var(--white); font-size: 0.9rem; }
+  .depoimento-meta { font-size: 0.8rem; color: rgba(255,255,255,0.6); }
+
+  /* ── CONTATO ── */
+  #contato { background: var(--white); display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+  .contato-detalhe { display: flex; gap: 1rem; align-items: flex-start; margin-top: 2rem; }
+  .contato-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--green-light); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+  .contato-detalhe-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); font-weight: 700; }
+  .contato-detalhe-value { font-size: 1rem; color: var(--text); margin-top: 0.2rem; }
+
+  .form-group { margin-bottom: 1.2rem; }
+  .form-label { display: block; font-size: 0.85rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; letter-spacing: 0.02em; }
+  .form-input, .form-select, .form-textarea {
+    width: 100%; padding: 0.85rem 1rem; border: 1.5px solid #e2d9cf; border-radius: 12px;
+    font-family: 'Lato', sans-serif; font-size: 0.95rem; color: var(--text); background: var(--white);
+    transition: border-color 0.2s, box-shadow 0.2s; outline: none;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(61,171,132,0.12); }
+  .form-textarea { min-height: 120px; resize: vertical; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .btn-submit {
+    width: 100%; padding: 1rem; background: var(--green); color: var(--white);
+    border: none; border-radius: 50px; font-family: 'Lato', sans-serif; font-weight: 700; font-size: 1rem;
+    cursor: pointer; transition: background 0.2s, transform 0.15s; margin-top: 0.5rem;
+  }
+  .btn-submit:hover { background: var(--green-dark); transform: translateY(-1px); }
+
+  /* ── FOOTER ── */
+  footer { background: #1a3d2e; color: rgba(255,255,255,0.7); padding: 4rem 5rem 2rem; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+  .footer-brand-name { font-family: 'Dancing Script', cursive; font-size: 2rem; color: var(--white); margin-bottom: 0.8rem; }
+  .footer-brand-text { font-size: 0.9rem; line-height: 1.7; font-weight: 300; max-width: 280px; }
+  .footer-socials { display: flex; gap: 0.8rem; margin-top: 1.5rem; }
+  .footer-social { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; text-decoration: none; color: var(--white); font-size: 0.9rem; transition: background 0.2s; }
+  .footer-social:hover { background: var(--green); }
+  .footer-col-title { font-weight: 700; color: var(--white); font-size: 0.9rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1.2rem; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .footer-links a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+  .footer-links a:hover { color: #a8e8cf; }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; }
+  .footer-bottom-brand { color: #a8e8cf; }
+
+  /* ── RESPONSIVIDADE ── */
+  @media (max-width: 900px) {
+    nav { padding: 0.9rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 4rem 1.5rem; }
+    #features { padding: 2.5rem 1.5rem; }
+    #hero { flex-direction: column; min-height: auto; padding: 7rem 1.5rem 4rem; }
+    .hero-content { width: 100%; padding: 0; }
+    .hero-balloons { display: none; }
+    #sobre, #contato { grid-template-columns: 1fr; gap: 2.5rem; }
+    .sobre-image { aspect-ratio: 16/9; }
+    .servicos-grid, .depoimentos-grid, .features-grid { grid-template-columns: 1fr; }
+    .galeria-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+    .galeria-item.big { grid-column: span 2; aspect-ratio: 16/9; height: 220px; }
+    .galeria-item { height: 150px; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .form-row { grid-template-columns: 1fr; }
+    .hero-stats { gap: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="navbar">
+  <a class="nav-logo" href="#">
+    <svg width="160" height="44" viewBox="0 0 160 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Limoeiro Casa de Festas">
+      <!-- Tronco -->
+      <rect x="21" y="30" width="4.5" height="12" rx="2.2" fill="#2d8f6c"/>
+      <!-- Copa externa -->
+      <ellipse cx="23" cy="20" rx="16" ry="18" fill="#3dab84"/>
+      <!-- Sombra interna -->
+      <ellipse cx="17" cy="24" rx="10" ry="11" fill="#2d8f6c" opacity="0.5"/>
+      <!-- Limões -->
+      <ellipse cx="16" cy="14" rx="5.5" ry="7.5" fill="#f5d04a" transform="rotate(-18 16 14)"/>
+      <ellipse cx="30" cy="17" rx="4.5" ry="6.2" fill="#e8c33a" transform="rotate(12 30 17)"/>
+      <ellipse cx="22" cy="26" rx="4" ry="5.5" fill="#f0cc45" transform="rotate(-5 22 26)"/>
+      <!-- Reflexo limão -->
+      <ellipse cx="14.5" cy="12" rx="1.8" ry="2.4" fill="#fff" opacity="0.35" transform="rotate(-18 14.5 12)"/>
+      <!-- Texto Limoeiro -->
+      <text x="46" y="26" font-family="'Dancing Script', Georgia, cursive" font-size="23" font-weight="700" fill="#2c2218">Limoeiro</text>
+      <!-- Subtítulo -->
+      <text x="47" y="39" font-family="'Lato', sans-serif" font-size="9.5" font-weight="700" fill="#7a6b5a" letter-spacing="2.2">CASA DE FESTAS</text>
+    </svg>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#sobre">Nossa história</a></li>
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#galeria">Galeria</a></li>
+    <li><a href="#depoimentos">Depoimentos</a></li>
+    <li><a href="https://cortex-limoeiro.vercel.app" target="_blank" rel="noopener" class="nav-sistema">⚙ Sistema</a></li>
+    <li><a href="#contato" class="nav-cta">Solicitar orçamento</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-content">
+    <div class="hero-tag">✨ Casa de Festas desde 2018</div>
+    <h1 class="hero-title">Momentos que ficam <span>para sempre</span> na memória</h1>
+    <p class="hero-subtitle">No Limoeiro, o brincar é o coração de tudo. Criamos festas únicas, cheias de afeto e personalidade — para crianças, famílias e empresas.</p>
+    <div class="hero-actions">
+      <a href="#contato" class="btn-primary">Solicitar orçamento</a>
+      <a href="#galeria" class="btn-outline">Ver galeria</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="hero-stat-num">500+</div><div class="hero-stat-label">Festas realizadas</div></div>
+      <div><div class="hero-stat-num">7 anos</div><div class="hero-stat-label">De experiência</div></div>
+      <div><div class="hero-stat-num">98%</div><div class="hero-stat-label">Clientes satisfeitos</div></div>
+    </div>
+  </div>
+  <div class="hero-balloons">
+    <div class="hero-photo-frame">
+      <!-- Substitua src pela foto principal da festa -->
+      <img src="/images/hero.jpg" alt="Festa Limoeiro" onerror="this.style.display='none'; this.parentElement.classList.add('hero-photo-placeholder')" />
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES ── -->
+<div id="features">
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">❤️</div>
+      <div>
+        <div class="feature-title">Equipe apaixonada</div>
+        <div class="feature-text">Criamos memórias afetivas com cada detalhe pensado com carinho para sua família.</div>
+      </div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎨</div>
+      <div>
+        <div class="feature-title">Decoração personalizada</div>
+        <div class="feature-text">Cada festa é única. Adaptamos temas, cores e estilos ao gosto de cada cliente.</div>
+      </div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🏆</div>
+      <div>
+        <div class="feature-title">Estrutura completa</div>
+        <div class="feature-text">Salão equipado, cozinha e suporte completo para eventos de todos os tamanhos.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SOBRE ── -->
+<section id="sobre">
+  <div class="sobre-image">
+    <!-- Substitua src pela foto da equipe/local -->
+    <img src="/images/sobre.jpg" alt="Equipe Limoeiro" />
+    <span style="font-size:3rem; position:relative; z-index:1">🌳</span>
+    <span style="position:relative; z-index:1; font-size:0.85rem">[ foto: sobre.jpg ]</span>
+  </div>
+  <div>
+    <div class="section-tag">Nossa história</div>
+    <h2 class="section-title">Um lugar criado por amor às festas</h2>
+    <p class="sobre-text">O Limoeiro nasceu do sonho de criar um espaço onde cada criança pudesse se sentir especial, e cada família pudesse viver momentos inesquecíveis sem preocupação.</p>
+    <p class="sobre-text">Com mais de 7 anos de experiência, construímos uma história de alegria, afeto e dedicação. Nossa equipe cuida de cada detalhe — da decoração à estrutura — para que você só precise curtir a festa.</p>
+    <div class="sobre-values">
+      <div class="sobre-value"><div class="sobre-value-dot"></div>Atendimento personalizado do início ao fim</div>
+      <div class="sobre-value"><div class="sobre-value-dot"></div>Espaço seguro e acolhedor para crianças</div>
+      <div class="sobre-value"><div class="sobre-value-dot"></div>Parceiros de confiança para buffet e entretenimento</div>
+      <div class="sobre-value"><div class="sobre-value-dot"></div>Flexibilidade para diferentes estilos e orçamentos</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SERVIÇOS ── -->
+<section id="servicos">
+  <div class="servicos-header">
+    <div class="section-tag">O que oferecemos</div>
+    <h2 class="section-title">Festas para cada momento da vida</h2>
+    <p class="section-subtitle">Do aniversário infantil ao evento corporativo, temos a estrutura e a equipe certa para tornar seu evento especial.</p>
+  </div>
+  <div class="servicos-grid">
+    <div class="servico-card">
+      <div class="servico-img s1">🎂</div>
+      <div class="servico-body">
+        <div class="servico-title">Festas Infantis</div>
+        <div class="servico-desc">Decoração temática, espaço de brincadeiras, monitores e toda a estrutura para uma festa inesquecível.</div>
+        <div class="servico-tag">Mais popular</div>
+      </div>
+    </div>
+    <div class="servico-card">
+      <div class="servico-img s2">💍</div>
+      <div class="servico-body">
+        <div class="servico-title">Casamentos &amp; Formaturas</div>
+        <div class="servico-desc">Ambiente elegante e personalizável para os momentos mais marcantes da sua vida, com suporte completo de decoração e buffet.</div>
+        <div class="servico-tag">Sob consulta</div>
+      </div>
+    </div>
+    <div class="servico-card">
+      <div class="servico-img s3">🏢</div>
+      <div class="servico-body">
+        <div class="servico-title">Eventos Corporativos</div>
+        <div class="servico-desc">Confraternizações, workshops e comemorações empresariais com infraestrutura profissional e atendimento dedicado.</div>
+        <div class="servico-tag">Sob consulta</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── GALERIA ── -->
+<section id="galeria">
+  <div class="galeria-header">
+    <div class="section-tag">Galeria</div>
+    <h2 class="section-title">Momentos que fotografamos com orgulho</h2>
+    <p class="section-subtitle">Uma pequena amostra das festas que realizamos. Cada evento é único e tratado com o mesmo carinho.</p>
+  </div>
+  <div class="galeria-grid">
+    <!-- Substitua os src pelas fotos reais em /public/images/ -->
+    <div class="galeria-item g1 big">🎉<div class="galeria-overlay">🔍</div></div>
+    <div class="galeria-item g2">🎂<div class="galeria-overlay">🔍</div></div>
+    <div class="galeria-item g3">🎈<div class="galeria-overlay">🔍</div></div>
+    <div class="galeria-item g4">🎊<div class="galeria-overlay">🔍</div></div>
+    <div class="galeria-item g5">✨<div class="galeria-overlay">🔍</div></div>
+  </div>
+</section>
+
+<!-- ── DEPOIMENTOS ── -->
+<section id="depoimentos">
+  <div class="depoimenos-header">
+    <div class="section-tag">Depoimentos</div>
+    <h2 class="section-title">O que as famílias dizem sobre nós</h2>
+    <p class="section-subtitle">A maior recompensa é ver a alegria nas fotos que nossos clientes compartilham.</p>
+  </div>
+  <div class="depoimentos-grid">
+    <div class="depoimento-card">
+      <div class="depoimento-stars">★★★★★</div>
+      <div class="depoimento-text">"O Limoeiro transformou o aniversário da minha filha em algo mágico. Cada detalhe foi pensado com tanto cuidado — ela ainda fala da festa!"</div>
+      <div class="depoimento-author">
+        <div class="depoimento-avatar">CM</div>
+        <div><div class="depoimento-name">Camila Menezes</div><div class="depoimento-meta">Festa infantil · Aniversário de 5 anos</div></div>
+      </div>
+    </div>
+    <div class="depoimento-card">
+      <div class="depoimento-stars">★★★★★</div>
+      <div class="depoimento-text">"Realizamos a confraternização da empresa aqui e foi um sucesso total. A equipe foi super atenciosa e a estrutura, impecável. Voltaremos com certeza!"</div>
+      <div class="depoimento-author">
+        <div class="depoimento-avatar">RS</div>
+        <div><div class="depoimento-name">Ricardo Silva</div><div class="depoimento-meta">Evento corporativo · 80 pessoas</div></div>
+      </div>
+    </div>
+    <div class="depoimento-card">
+      <div class="depoimento-stars">★★★★★</div>
+      <div class="depoimento-text">"Fiz meu casamento no Limoeiro e foi perfeito. Eles entenderam exatamente o que eu queria e entregaram muito mais do que esperávamos."</div>
+      <div class="depoimento-author">
+        <div class="depoimento-avatar">AO</div>
+        <div><div class="depoimento-name">Ana Oliveira</div><div class="depoimento-meta">Casamento · 120 convidados</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTATO ── -->
+<section id="contato">
+  <div class="contato-info">
+    <div class="section-tag">Fale conosco</div>
+    <h2 class="section-title">Vamos planejar sua festa juntos?</h2>
+    <p class="section-subtitle">Preencha o formulário e nossa equipe entrará em contato em até 24 horas com uma proposta personalizada.</p>
+    <div class="contato-detalhe">
+      <div class="contato-icon">📍</div>
+      <div>
+        <div class="contato-detalhe-label">Endereço</div>
+        <div class="contato-detalhe-value">Rua das Festas, 123 — São Paulo, SP</div>
+      </div>
+    </div>
+    <div class="contato-detalhe">
+      <div class="contato-icon">📞</div>
+      <div>
+        <div class="contato-detalhe-label">Telefone / WhatsApp</div>
+        <div class="contato-detalhe-value">(11) 99999-9999</div>
+      </div>
+    </div>
+    <div class="contato-detalhe">
+      <div class="contato-icon">📧</div>
+      <div>
+        <div class="contato-detalhe-label">E-mail</div>
+        <div class="contato-detalhe-value">contato@limoeirobuffet.com</div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Nome completo</label>
+        <input class="form-input" type="text" placeholder="Seu nome" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Telefone / WhatsApp</label>
+        <input class="form-input" type="tel" placeholder="(11) 99999-9999" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">E-mail</label>
+      <input class="form-input" type="email" placeholder="seu@email.com" />
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Tipo de evento</label>
+        <select class="form-select">
+          <option value="">Selecione...</option>
+          <option>Festa infantil</option>
+          <option>Casamento</option>
+          <option>Formatura</option>
+          <option>Evento corporativo</option>
+          <option>Outro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Data do evento</label>
+        <input class="form-input" type="date" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Número de convidados</label>
+      <input class="form-input" type="number" placeholder="Ex: 50" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Mensagem / detalhes</label>
+      <textarea class="form-textarea" placeholder="Conte um pouco mais sobre o evento que você imagina..."></textarea>
+    </div>
+    <button class="btn-submit" onclick="handleFormSubmit()">Solicitar orçamento gratuito →</button>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-name">🌳 Limoeiro</div>
+      <div class="footer-brand-text">Criando memórias afetivas e festas inesquecíveis há mais de 7 anos. No Limoeiro, o brincar é o coração de tudo.</div>
+      <div class="footer-socials">
+        <a class="footer-social" href="https://instagram.com" target="_blank" title="Instagram">📷</a>
+        <a class="footer-social" href="https://facebook.com" target="_blank" title="Facebook">📘</a>
+        <a class="footer-social" href="https://wa.me/5511999999999" target="_blank" title="WhatsApp">💬</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Navegação</div>
+      <ul class="footer-links">
+        <li><a href="#hero">Início</a></li>
+        <li><a href="#sobre">Nossa história</a></li>
+        <li><a href="#servicos">Serviços</a></li>
+        <li><a href="#galeria">Galeria</a></li>
+        <li><a href="#depoimentos">Depoimentos</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Serviços</div>
+      <ul class="footer-links">
+        <li><a href="#servicos">Festas infantis</a></li>
+        <li><a href="#servicos">Casamentos</a></li>
+        <li><a href="#servicos">Formaturas</a></li>
+        <li><a href="#servicos">Corporativo</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Contato</div>
+      <ul class="footer-links">
+        <li><a href="tel:+5511999999999">(11) 99999-9999</a></li>
+        <li><a href="mailto:contato@limoeirobuffet.com">contato@limoeirobuffet.com</a></li>
+        <li><a href="#contato">Rua das Festas, 123</a></li>
+        <li><a href="#contato">São Paulo, SP</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 <span class="footer-bottom-brand">Limoeiro Casa de Festas</span>. Todos os direitos reservados.</span>
+    <span>Desenvolvido pela Equipe Cinco · IFSP</span>
+  </div>
+</footer>
+
+<script>
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  function handleFormSubmit() {
+    // Conectar ao POST /api/contact — ver ContactForm.jsx
+    alert('Formulário enviado! Em breve entraremos em contato.');
+  }
+</script>
+</body>
+</html>
