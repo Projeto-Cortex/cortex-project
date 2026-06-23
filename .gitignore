@@ -3,3 +3,9 @@ dist/
 .env
 *.log
 .DS_Store
+
+# Tool caches — never commit
+.vercel
+.netlify
+.claude
+.vscode
