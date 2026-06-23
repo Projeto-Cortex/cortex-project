@@ -9,3 +9,4 @@ dist/
 .netlify
 .claude
 .vscode
+package-lock.json

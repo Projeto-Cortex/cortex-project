@@ -1,71 +1,50 @@
 # Cortex — Painel Administrativo Limoeiro Buffet
 
-Sistema web interno com login, calculadora de cardápio e agendamento de eventos.
+Sistema web de gestão para buffets: cardápios, calculadora de compras e agenda de eventos.
 
-## Pré-requisitos
+## Estrutura
 
-- Node.js >= 18
-- MySQL 8.x rodando localmente
+```
+cortex-project/
+├── backend/     Node.js + Express + Prisma + MySQL (Railway)
+├── frontend/    React + Vite + Tailwind (Vercel / Netlify)
+└── landing_page/  Site público do Limoeiro Buffet (Netlify)
+```
 
-## Back-end
+## Rodando localmente
+
+### Back-end
 
 ```bash
 cd backend
 npm install
-cp .env.example .env
-```
-
-Edite o arquivo `.env` com sua conexão MySQL e uma chave JWT:
-
-```env
-DATABASE_URL="mysql://root:senha@localhost:3306/cortex"
-JWT_SECRET="uma_chave_longa_e_aleatoria_aqui"
-JWT_EXPIRES_IN="8h"
-PORT=3000
-CORS_ORIGIN="http://localhost:5173"
-```
-
-Crie o banco e aplique a migração:
-
-```bash
-npx prisma migrate dev --name init
+cp .env.example .env   # preencha DATABASE_URL e JWT_SECRET
+npx prisma migrate dev
 npx prisma db seed
-npm run dev
+node src/app.js
 ```
 
-API disponível em: `http://localhost:3000`
-
-## Front-end
+### Front-end
 
 ```bash
 cd frontend
 npm install
-cp .env.example .env
-```
-
-Edite o arquivo `.env`:
-
-```env
-VITE_API_URL="http://localhost:3000/api"
-```
-
-```bash
+cp .env.example .env   # VITE_API_URL=http://localhost:3000/api
 npm run dev
 ```
 
-App disponível em: `http://localhost:5173`
-
-## Credenciais do seed
+## Credenciais (seed)
 
 | E-mail | Senha | Perfil |
 |---|---|---|
 | admin@limoeiro.com | admin123 | ADMIN |
 | operador@limoeiro.com | oper123 | OPERATOR |
 
-## Funcionalidades
+## Deploy
 
-- **Login** com JWT — token armazenado em `localStorage`
-- **Dashboard** — total de cardápios, eventos do mês e próximos eventos
-- **Calculadora** — selecione cardápio, informe adultos/crianças e gere lista de compras proporcional
-- **Cardápios** — CRUD completo (somente ADMIN), soft delete
-- **Eventos** — criar, editar e remover eventos com filtro por status
+| Serviço | URL |
+|---|---|
+| Frontend | https://cortex-limoeiro.vercel.app |
+| Frontend (espelho) | https://cortex-limoeiro.netlify.app |
+| Backend | https://cortex-backend-production-7ed8.up.railway.app |
+| Landing page | https://limoeiro-buffet-landing.netlify.app |

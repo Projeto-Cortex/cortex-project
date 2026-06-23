@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { login as loginService, getMe } from '../services/authService'
+import api from '../services/api'
 
 const AuthContext = createContext(null)
 
@@ -12,14 +12,14 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const token = localStorage.getItem('cortex_token')
     if (!token) { setLoading(false); return }
-    getMe()
+    api.get('/auth/me')
       .then(res => setUser(res.data))
       .catch(() => localStorage.removeItem('cortex_token'))
       .finally(() => setLoading(false))
   }, [])
 
   async function login(email, password) {
-    const res = await loginService(email, password)
+    const res = await api.post('/auth/login', { email, password })
     localStorage.setItem('cortex_token', res.data.token)
     setUser(res.data.user)
     navigate('/admin/dashboard')
