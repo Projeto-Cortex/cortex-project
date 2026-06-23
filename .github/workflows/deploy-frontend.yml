@@ -7,22 +7,6 @@ on:
       - 'frontend/**'
 
 jobs:
-  deploy-vercel:
-    name: Deploy to Vercel
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Vercel CLI
-        run: npm install -g vercel@latest
-
-      - name: Deploy to Vercel (production)
-        working-directory: frontend
-        run: vercel --prod --yes --token ${{ secrets.VERCEL_TOKEN }}
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
   deploy-netlify:
     name: Deploy to Netlify
     runs-on: ubuntu-latest
@@ -36,6 +20,8 @@ jobs:
       - name: Build
         working-directory: frontend
         run: npm run build
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
 
       - name: Deploy to Netlify (production)
         working-directory: frontend
